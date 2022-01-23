@@ -1,3 +1,3 @@
-module http
+module remaketodolist
 
 go 1.17

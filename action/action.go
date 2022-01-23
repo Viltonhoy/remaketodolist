@@ -12,10 +12,11 @@ type JsAct struct {
 }
 
 type Act struct {
-	Action map[int]JsAct
+	ActIon  map[int]JsAct
+	Counter int
 }
 
-func (h *Act) action(w http.ResponseWriter, r *http.Request) {
+func (h *Act) Action(w http.ResponseWriter, r *http.Request) {
 	var typ JsAct
 
 	str, _ := ioutil.ReadAll(r.Body)
@@ -27,6 +28,12 @@ func (h *Act) action(w http.ResponseWriter, r *http.Request) {
 
 	if typ.St == "" {
 		http.Error(w, "Missing Field \"St\"", http.StatusBadRequest)
+		return
 	}
+
+	h.Counter++
+	h.ActIon[h.Counter] = typ
+	js, _ := json.Marshal(h.Action)
+	w.Write(js)
 
 }
