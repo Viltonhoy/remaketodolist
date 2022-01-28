@@ -1,18 +1,10 @@
-package delete
+package handlers
 
 import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
 )
-
-type JsAct struct {
-	St string
-}
-
-type Act struct {
-	Action map[int]JsAct
-}
 
 type Del struct {
 	Id int
@@ -22,7 +14,7 @@ type Calcul struct {
 	Cltr []int
 }
 
-func (h *Act) delete(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {
 	var n Del
 	var s Calcul
 	s.Cltr = append(s.Cltr, 0)
@@ -44,13 +36,15 @@ func (h *Act) delete(w http.ResponseWriter, r *http.Request) {
 
 	s.Cltr = append(s.Cltr, n.Id)
 
-	for a := range h.Action {
-		if a == n.Id {
-			delete(h.Action, n.Id)
-		}
+	_, b := h.Storage[n.Id]
+	if b {
+		delete(h.Storage, n.Id)
+	} else {
+		http.Error(w, "Wrong Id", http.StatusBadRequest)
+		return
 	}
 
-	js, err := json.Marshal(h.Action)
+	js, err := json.Marshal(h.Storage)
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return

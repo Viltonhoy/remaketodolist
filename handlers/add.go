@@ -1,4 +1,4 @@
-package action
+package handlers
 
 import (
 	"encoding/json"
@@ -7,16 +7,12 @@ import (
 	"net/http"
 )
 
+// структура для анмаршелинга
 type JsAct struct {
 	St string
 }
 
-type Act struct {
-	ActIon  map[int]JsAct
-	Counter int
-}
-
-func (h *Act) Action(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) Add(w http.ResponseWriter, r *http.Request) {
 	var typ JsAct
 
 	str, _ := ioutil.ReadAll(r.Body)
@@ -32,8 +28,11 @@ func (h *Act) Action(w http.ResponseWriter, r *http.Request) {
 	}
 
 	h.Counter++
-	h.ActIon[h.Counter] = typ
-	js, _ := json.Marshal(h.Action)
+	h.Storage[h.Counter] = typ.St
+	js, err := json.Marshal(h.Storage)
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+	}
 	w.Write(js)
 
 }

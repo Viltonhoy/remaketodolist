@@ -1,4 +1,4 @@
-package rewrite
+package handlers
 
 import (
 	"encoding/json"
@@ -6,21 +6,12 @@ import (
 	"net/http"
 )
 
-type Act struct {
-	Action  map[int]JsAct
-	counter int
-}
-
-type JsAct struct {
-	St string
-}
-
 type Rew struct {
 	Num int
 	Str string
 }
 
-func (h *Act) rewrite(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) Rewrite(w http.ResponseWriter, r *http.Request) {
 	var mp Rew
 
 	str, _ := ioutil.ReadAll(r.Body)
@@ -31,13 +22,13 @@ func (h *Act) rewrite(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	for a := range h.Action {
+	for a := range h.Storage {
 		if a == mp.Num {
-			h.Action[a] = JsAct{mp.Str}
+			h.Storage[a] = mp.Str
 		}
 	}
 
-	js, err := json.Marshal(h.Action)
+	js, err := json.Marshal(h.Storage)
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return

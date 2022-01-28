@@ -3,19 +3,18 @@ package main
 import (
 	"log"
 	"net/http"
-	"remaketodolist/action"
-	//"remaketodolist/delete"
+	"remaketodolist/handlers"
 )
 
 func main() {
 
-	h := action.Act{
-		ActIon:  make(map[int]action.JsAct),
+	h := handlers.Handler{
+		Storage: make(map[int]string),
 		Counter: 0,
 	}
 
-	http.HandleFunc("/add", h.Action)
-	//http.HandleFunc("/del", h.delete.delete)
+	http.HandleFunc("/add", h.Add)
+	http.HandleFunc("/del", h.Delete)
 
 	port := ":9090"
 	err := http.ListenAndServe(port, nil)
