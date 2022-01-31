@@ -6,17 +6,17 @@ import (
 	"net/http"
 )
 
-type Del struct {
+type del struct {
 	Id int
 }
 
-type Calcul struct {
+type calcul struct {
 	Cltr []int
 }
 
 func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {
-	var n Del
-	var s Calcul
+	var n del
+	var s calcul
 	s.Cltr = append(s.Cltr, 0)
 
 	str, _ := ioutil.ReadAll(r.Body)

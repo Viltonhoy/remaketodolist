@@ -6,13 +6,13 @@ import (
 	"net/http"
 )
 
-type Rew struct {
+type rew struct {
 	Num int
 	Str string
 }
 
 func (h *Handler) Rewrite(w http.ResponseWriter, r *http.Request) {
-	var mp Rew
+	var mp rew
 
 	str, _ := ioutil.ReadAll(r.Body)
 	err := json.Unmarshal(str, &mp)

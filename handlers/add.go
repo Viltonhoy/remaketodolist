@@ -8,18 +8,20 @@ import (
 )
 
 // структура для анмаршелинга
-type JsAct struct {
+type jsAct struct {
 	St string
 }
 
 func (h *Handler) Add(w http.ResponseWriter, r *http.Request) {
-	var typ JsAct
+	var typ jsAct
 
 	str, _ := ioutil.ReadAll(r.Body)
 	err := json.Unmarshal(str, &typ)
 
 	if err != nil {
 		fmt.Println("Error", err)
+		http.Error(w, "Empty request body", http.StatusBadRequest)
+		return
 	}
 
 	if typ.St == "" {

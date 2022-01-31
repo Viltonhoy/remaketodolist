@@ -10,7 +10,6 @@ func main() {
 
 	h := handlers.Handler{
 		Storage: make(map[int]string),
-		Counter: 0,
 	}
 
 	http.HandleFunc("/add", h.Add)
