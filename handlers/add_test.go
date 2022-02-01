@@ -3,6 +3,7 @@ package handlers
 import (
 	"bytes"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -38,10 +39,8 @@ func TestHandlerAdd(t *testing.T) {
 
 		s.Add(w, req)
 
-		resp := w.Result()
-
-		assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
-		assert.Equal(t, http.StatusText(http.StatusBadRequest), resp.Status)
+		resp, _ := ioutil.ReadAll(w.Body)
+		assert.Equal(t, "Empty request body\n", string(resp))
 
 	})
 }
