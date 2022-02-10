@@ -14,6 +14,7 @@ func main() {
 
 	http.HandleFunc("/add", h.Add)
 	http.HandleFunc("/del", h.Delete)
+	http.HandleFunc("/rew", h.Rewrite)
 
 	port := ":9090"
 	err := http.ListenAndServe(port, nil)

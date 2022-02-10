@@ -43,4 +43,19 @@ func TestHandlerAdd(t *testing.T) {
 		assert.Equal(t, "Empty request body\n", string(resp))
 
 	})
+
+	t.Run("empty St value", func(t *testing.T) {
+		arg := bytes.NewBuffer([]byte(`{"St":""}`))
+		req := httptest.NewRequest(http.MethodGet, "http://loacalhost:9090/add", arg)
+		w := httptest.NewRecorder()
+
+		s := Handler{
+			Storage: make(map[int]string),
+		}
+
+		s.Add(w, req)
+
+		resp, _ := ioutil.ReadAll(w.Body)
+		assert.Equal(t, "Missing Field \"St\"\n", string(resp))
+	})
 }
